@@ -1,0 +1,15 @@
+#!/bin/bash -e
+# $File: gendoc
+# $Date: Tue Jul 03 11:47:24 2012 +0800
+# $Author: jiakai <jia.kai66@gmail.com>
+
+# make clean
+export PYTHONDONTWRITEBYTECODE=1
+rm -f source/autogen/ftp9.rst
+
+sphinx-apidoc2 -o source/autogen ../ftp9
+rm -f source/autogen/modules.rst
+
+make html
+
+# vim: ft=sh

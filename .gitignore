@@ -1,0 +1,6 @@
+*.pyc
+*.swp
+
+docs/build/*
+docs/source/autogen/*
+
