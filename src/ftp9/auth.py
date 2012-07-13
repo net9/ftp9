@@ -1,22 +1,37 @@
 # -*- coding: utf-8 -*-
 # $File: auth.py
-# $Date: Tue Jul 03 11:48:37 2012 +0800
+# $Date: Fri Jul 13 11:40:06 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
-
-"""provides an authorizer integrated with Accouts9 for pyftpdlib"""
-
-from pyftpdlib import ftpserver
 
 import os
 
+from pyftpdlib import ftpserver
+
+from ftp9.api import Acnt9API
+from ftp9.exc import FTP9Error
+from ftp9.config import config
+
 class Authorizer(ftpserver.DummyAuthorizer):
+    """authorizer used for pyftpdlib"""
+
+    _group_info = None
+
+    def __init__(self, grp):
+        """:param grp: a :class:`ftp9.group.Group` instance used for manipulating group
+        information"""
+        super(Authorizer, self).__init__()
+        self._group_info = grp
+
     def validate_authentication(self, username, passwd):
-        print "auth", username, passwd
+        try:
+            api = Acnt9API(username, passwd)
+        except Exception as e:
+            return 'failed to login: {0}'.format(e)
+        self._group_info.update(api)
         return True
 
     def get_home_dir(self, username):
-        print "hw", username
-        return os.getcwd()
+        return config.FTP_ROOT
 
     def get_msg_login(self, username):
         return "welcome, " + username + "!"
@@ -32,7 +47,4 @@ class Authorizer(ftpserver.DummyAuthorizer):
         print "has perm", username, perm, path
         return True
 
-
-def get_authorizer():
-    return Authorizer()
 

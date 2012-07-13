@@ -3,4 +3,5 @@
 
 docs/build/*
 docs/source/autogen/*
+init.sh
 

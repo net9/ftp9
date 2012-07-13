@@ -3188,7 +3188,8 @@ class FTPHandler(object, asynchat.async_chat):
                 self.log_cmd("PASS", line, 530, msg)
             self.on_login_failed(username, password)
 
-        if self.authorizer.validate_authentication(self.username, line):
+        rst = self.authorizer.validate_authentication(self.username, line)
+        if rst is True:
             msg_login = self.authorizer.get_msg_login(self.username)
             if len(msg_login) <= 75:
                 self.respond('230 %s' % msg_login)
@@ -3208,6 +3209,8 @@ class FTPHandler(object, asynchat.async_chat):
                 msg = "Anonymous access not allowed."
             else:
                 msg = "Authentication failed."
+            if isinstance(rst, basestring):
+                msg = rst.encode('utf-8')
             CallLater(self._auth_failed_timeout, auth_failed, self.username,
                       line, msg, _errback=self.handle_error)
             self.username = ""

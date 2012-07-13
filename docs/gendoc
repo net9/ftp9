@@ -1,13 +1,14 @@
 #!/bin/bash -e
 # $File: gendoc
-# $Date: Tue Jul 03 11:47:24 2012 +0800
+# $Date: Fri Jul 13 10:39:41 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
+. ../init.sh
 # make clean
 export PYTHONDONTWRITEBYTECODE=1
 rm -f source/autogen/ftp9.rst
 
-sphinx-apidoc2 -o source/autogen ../ftp9
+sphinx-apidoc -o source/autogen ../src/
 rm -f source/autogen/modules.rst
 
 make html
