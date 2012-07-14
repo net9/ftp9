@@ -2277,7 +2277,7 @@ class FTPHandler(object, asynchat.async_chat):
             perm = self.proto_cmds[cmd]['perm']
             if perm is not None and cmd != 'STOU':
                 if not self.authorizer.has_perm(self.username, perm, arg):
-                    msg = "Not enough privileges."
+                    msg = "Permission denied."
                     self.respond("550 " + msg)
                     self.log_cmd(cmd, arg, 550, msg)
                     return
@@ -3070,7 +3070,7 @@ class FTPHandler(object, asynchat.async_chat):
                 self.run_as_current_user(self.fs.remove, fd.name)
             except OSError:
                 pass
-            self.respond("550 Not enough privileges.")
+            self.respond("550 Permission denied.")
             return
 
         # now just acts like STOR except that restarting isn't allowed

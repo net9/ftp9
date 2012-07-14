@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # $File: config.py
-# $Date: Fri Jul 13 11:55:28 2012 +0800
+# $Date: Sat Jul 14 19:22:30 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 """server configuration, see the source for details"""
@@ -23,6 +23,7 @@ class _Config:
     ACCOUNTS9_SERVER_ADDR = 'https://accounts.net9.org/'
 
     FILESYSTEM_ENCODING = 'utf-8'
+    USERNAME_ENCODING = 'utf-8'
 
     CLIENT_ID = 'RYDzVZQ5FuQc9-bfyb2xQb8HeiU'
     CLIENT_SECRET = '8nyXuWB7dqNcshu5ZQ1B'

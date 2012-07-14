@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 # $File: auth.py
-# $Date: Fri Jul 13 11:40:06 2012 +0800
+# $Date: Sat Jul 14 19:29:33 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 import os
+import os.path
 
 from pyftpdlib import ftpserver
 
@@ -40,11 +41,23 @@ class Authorizer(ftpserver.DummyAuthorizer):
         return "goodbye!"
 
     def get_perms(self, username):
-        ftpserver.logerror("unsuppoted operation: Authorizer.get_perms")
+        ftpserver.logerror("unsupported operation: Authorizer.get_perms")
         return ""
 
+    _perm_map = {'e': 'read', 'l': 'read', 'r': 'read', 'a': 'modify',
+            'd': 'modify', 'f': 'modify', 'm': 'write', 'w': 'write',
+            'M': 'modify'}
     def has_perm(self, username, perm, path = None):
-        print "has perm", username, perm, path
-        return True
+        path = path.decode(config.FILESYSTEM_ENCODING)
+        parts = path.split(u'/')
+        for i in range(len(parts)):
+            base = parts[i]
+            if base == 'public' or base == 'private':
+                g = self._group_info.get_node_by_path(u'/'.join(parts[:i]))
+                if not g:
+                    return False
+                return username.decode(config.USERNAME_ENCODING) in getattr(g,
+                        base + '_' + self._perm_map[perm])
 
+        return True
 
