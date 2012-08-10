@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # $File: group.py
-# $Date: Sat Jul 14 19:27:03 2012 +0800
+# $Date: Thu Aug 02 17:43:18 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 import os
@@ -162,13 +162,17 @@ class Group(object):
             for i in node.children:
                 add_to_subtree(i, fields, user)
 
+        alluser = set()
         for g in self._path2grp.itervalues():
-            alluser = g.users + g.admins
-            add_to_subtree(g, ['public_read', 'private_read'], alluser)
-            add_to_root(g, ['public_read'], alluser)
+            alluser.update(g.users, g.admins)
+        add_to_subtree(self._root, ['public_read'], alluser)
 
-            g.private_write.update(alluser)
+        for g in self._path2grp.itervalues():
+            curuser = g.users + g.admins
+            add_to_subtree(g, ['private_read'], curuser)
+            add_to_root(g, ['private_read'], curuser)
 
-            add_to_root(g, ['public_write'], alluser)
-            # add_to_subtree(g, ['private_write'], g.admins)
+            add_to_root(g, ['public_write', 'private_write'], curuser)
+            add_to_subtree(g, ['public_write', 'private_write'], g.admins)
 
+            add_to_subtree(g, ['public_modify', 'private_modify'], g.admins)
