@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # $File: config.py
-# $Date: Sat Jul 14 19:22:30 2012 +0800
+# $Date: Sun Aug 12 12:07:37 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 """server configuration, see the source for details"""
@@ -11,7 +11,7 @@ class _Config:
     FTP_ROOT = '/tmp/ftp9'
 
     FTP_DISCARDED_GROUP = '/tmp/ftp9-old'
-    # when group structure gets changed, directories for groups that no more
+    # when group structure gets changed, directories for groups that no longer
     # exist will be moved to this directory; set to None to remove those
     # directories directly
 
@@ -30,3 +30,6 @@ class _Config:
     INTERFACE_SECRET = 'dYpo6zB1m7azVpL'
 
 config = _Config()
+
+from config_overwrite import overwrite_config as _oc
+_oc(config)

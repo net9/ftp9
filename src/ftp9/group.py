@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 # $File: group.py
-# $Date: Thu Aug 02 17:43:18 2012 +0800
+# $Date: Sun Aug 12 12:05:54 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
+
+"""Implementing :class:`Group<ftp9.group.Group>` class and define authorization strategy."""
 
 import os
 import os.path
@@ -51,6 +53,8 @@ class Group(object):
     _path2grp = None
 
     def update(self, api):
+        """update group information and corresponding filesystem structure
+        using an :class:`Acnt9API <ftp9.api.Acnt9API>` instance."""
         t = api.get_group_timestamp()
         if t != self._timestamp:
             self._timestamp = t

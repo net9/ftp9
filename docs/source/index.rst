@@ -1,5 +1,5 @@
 ..  $File: index.rst
-    $Date: Fri Jul 13 11:09:01 2012 +0800
+    $Date: Sun Aug 12 11:59:48 2012 +0800
     $Author: jiakai<jia.kai66@gmail.com>
 
 
@@ -14,7 +14,7 @@ authentication system.
 Quickstart:
 
     #. Create ``init.sh`` in the source root so that environment variable
-       ``PYTHON`` can be set appropriately to your python2 interpreter.
+       ``PYTHON`` can be set to point to your python2 interpreter.
 
        Example:
 
@@ -22,7 +22,16 @@ Quickstart:
 
                echo 'export PYTHON=python2' > init.sh
 
-    #. Modify src/ftp9/config.py
+    #. Create ``src/config_overwrite.py`` to set custom configuration.
+
+       Example:
+
+           .. code-block:: python
+
+               def overwrite_config(conf):
+                   conf.FTP_BIND = ('', 21)
+                   conf.FTP_ROOT = '/data/ftp'
+
     
     #. Execute ``start.sh`` to start the server.
 

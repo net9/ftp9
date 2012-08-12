@@ -5,3 +5,5 @@ docs/build/*
 docs/source/autogen/*
 init.sh
 
+src/ftp9/config_overwrite.py
+
