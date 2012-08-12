@@ -3208,7 +3208,7 @@ class FTPHandler(object, asynchat.async_chat):
             self.fs = self.abstracted_fs(home, self)
             self.on_login(self.username)
         else:
-            self.log("authentication failed")
+            self.log_error("authentication failed")
 
             self.sleeping = True
             if self.username == 'anonymous':
