@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # $File: config.py
-# $Date: Sun Aug 12 21:50:20 2012 +0800
+# $Date: Sun Aug 12 22:24:09 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 """Server configuration file template. Note that custom configuration should be
@@ -54,5 +54,5 @@ class Config(object):
 
 config = Config()
 
-from config_overwrite import overwrite_config as _oc
+from ftp9.config_overwrite import overwrite_config as _oc
 _oc(config)
