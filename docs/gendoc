@@ -1,6 +1,6 @@
 #!/bin/bash -e
 # $File: gendoc
-# $Date: Fri Jul 13 10:39:41 2012 +0800
+# $Date: Sun Aug 12 22:02:06 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 . ../init.sh
@@ -12,5 +12,7 @@ sphinx-apidoc -o source/autogen ../src/
 rm -f source/autogen/modules.rst
 
 make html
+
+rm -f build/html/_modules/ftp9/config_overwrite.html
 
 # vim: ft=sh
