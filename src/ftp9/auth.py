@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # $File: auth.py
-# $Date: Thu Aug 02 16:59:47 2012 +0800
+# $Date: Sun Aug 12 10:20:04 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 import os
@@ -59,5 +59,5 @@ class Authorizer(ftpserver.DummyAuthorizer):
                 return username.decode(config.USERNAME_ENCODING) in \
                         getattr(g, base + '_' + self._perm_map[perm])
 
-        return True
+        return perm in ['e', 'l']
 
