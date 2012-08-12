@@ -2188,10 +2188,11 @@ class FTPHandler(object, asynchat.async_chat):
             cmd = "SITE %s" % arg.split(' ')[0].upper()
             arg = line[len(cmd)+1:]
 
-        if cmd != 'PASS':
-            self.logline("<== %s" % line)
-        else:
-            self.logline("<== %s %s" % (line.split(' ')[0], '*' * 6))
+        # do not log every command
+        #if cmd != 'PASS':
+        #    self.logline("<== %s" % line)
+        #else:
+        #    self.logline("<== %s %s" % (line.split(' ')[0], '*' * 6))
 
         # Recognize those commands having a "special semantic". They
         # should be sent by following the RFC-959 procedure of sending
@@ -2482,7 +2483,8 @@ class FTPHandler(object, asynchat.async_chat):
         """Send a response to the client using the command channel."""
         self._last_response = resp
         self.push(resp + '\r\n')
-        self.logline('==> %s' % resp)
+        # do not log every command
+        # self.logline('==> %s' % resp)
 
     def push_dtp_data(self, data, isproducer=False, file=None, cmd=None):
         """Pushes data into the data channel.
@@ -3190,6 +3192,8 @@ class FTPHandler(object, asynchat.async_chat):
 
         rst = self.authorizer.validate_authentication(self.username, line)
         if rst is True:
+            self.log("Successfully logged in.")
+
             msg_login = self.authorizer.get_msg_login(self.username)
             if len(msg_login) <= 75:
                 self.respond('230 %s' % msg_login)
@@ -3204,6 +3208,8 @@ class FTPHandler(object, asynchat.async_chat):
             self.fs = self.abstracted_fs(home, self)
             self.on_login(self.username)
         else:
+            self.log("authentication failed")
+
             self.sleeping = True
             if self.username == 'anonymous':
                 msg = "Anonymous access not allowed."
@@ -3789,7 +3795,7 @@ class FTPServer(object, asyncore.dispatcher):
             handler = self.handler(sock, self)
             if not handler.connected:
                 return
-            log("[]%s:%s Connected." % addr[:2])
+            #log("[]%s:%s Connected." % addr[:2])
             ip = addr[0]
             self.ip_map.append(ip)
 

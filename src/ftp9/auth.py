@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 # $File: auth.py
-# $Date: Sun Aug 12 16:24:08 2012 +0800
+# $Date: Sun Aug 12 20:13:27 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 import os
 import os.path
+from hashlib import md5
 
 from pyftpdlib import ftpserver
 
@@ -24,6 +25,9 @@ class Authorizer(ftpserver.DummyAuthorizer):
         self._group_info = grp
 
     def validate_authentication(self, username, passwd):
+        if username == config.FTP_ADMIN_USERNAME:
+            return md5(passwd).hexdigest() == config.FTP_ADMIN_PASSWD_MD5
+
         try:
             api = Acnt9API(username, passwd)
         except Exception as e:
@@ -48,14 +52,16 @@ class Authorizer(ftpserver.DummyAuthorizer):
             'd': 'modify', 'f': 'modify', 'm': 'write', 'w': 'write',
             'M': 'modify'}
     def has_perm(self, username, perm, path = None):
-        if isinstance(path, str):
-            path = path.decode(config.FILESYSTEM_ENCODING)
         if isinstance(username, str):
             username = username.decode(config.USERNAME_ENCODING)
+        if isinstance(path, str):
+            path = path.decode(config.FILESYSTEM_ENCODING)
         parts = path.split(u'/')
         for i in range(len(parts)):
             base = parts[i]
             if base == config.PUBLIC_NAME or base == config.PRIVATE_NAME:
+                if username == config.FTP_ADMIN_USERNAME:
+                    return True
                 base = 'public' if base == config.PUBLIC_NAME else 'private' 
                 g = self._group_info.get_node_by_path(u'/'.join(parts[:i]))
                 if not g:

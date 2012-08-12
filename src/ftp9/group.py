@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # $File: group.py
-# $Date: Sun Aug 12 16:32:22 2012 +0800
+# $Date: Sun Aug 12 21:26:17 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 """Implementing :class:`Group<ftp9.group.Group>` class and define authorization strategy."""
@@ -10,6 +10,7 @@ import os.path
 import shutil
 
 from ftp9.config import config
+from ftp9.utils import relpath
 
 class Group(object):
     """group information and authorization strategy"""
@@ -123,7 +124,7 @@ class Group(object):
                     tgt_dir = pjoin(
                             config.FTP_DISCARDEDGRP_SAVEDIR,
                             self._timestamp,
-                            os.path.relpath(rootdir, config.FTP_ROOT))
+                            relpath(rootdir))
                     if not os.path.isdir(tgt_dir):
                         os.makedirs(tgt_dir)
                     shutil.move(p0, tgt_dir)

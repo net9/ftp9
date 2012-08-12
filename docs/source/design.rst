@@ -1,5 +1,5 @@
 ..  $File: design.rst
-    $Date: Sun Aug 12 17:40:11 2012 +0800
+    $Date: Sun Aug 12 20:17:22 2012 +0800
     $Author: jiakai<jia.kai66@gmail.com>
 
 
@@ -13,11 +13,14 @@ is used as the FTP back-end.
 authorization class, whose interface is defined by pyftpdlib. When a new
 connection is established, :class:`Acnt9API <ftp9.api.Acnt9API>` is invoked to
 authenticate the user name and password using `Accounts9 API
-<https://wiki.net9.org/w/Net9Auth>`_, and then
-:meth:`Group.update <ftp9.group.Group.update>` is called to synchronize group
-information. :meth:`Authorizer.has_perm <ftp9.auth.Authorizer.has_perm>` is used
-for permission check, but underlying `authorization strategy
-<https://wiki.net9.org/w/Ftp9>`_ is implemented in ``src/ftp9/group.py``.
+<https://wiki.net9.org/w/Net9Auth>`_, and then :meth:`Group.update
+<ftp9.group.Group.update>` is called to synchronize group information and update
+filesystem structure. Note that if a directory (not a file) does not have a
+corresponding group, it will be moved to another directory or removed
+permanently, depending on the configuration. :meth:`Authorizer.has_perm
+<ftp9.auth.Authorizer.has_perm>` is used for permission check, but underlying
+`authorization strategy <https://wiki.net9.org/w/Ftp9>`_ is implemented in
+``src/ftp9/group.py``.
 
 ``src/ftp9/config.py`` is the configuration file template, but it is tracked by git.
 So custom configuration should be written in ``src/ftp9/config_overwrite.py``, in

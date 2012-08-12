@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # $File: config.py
-# $Date: Sun Aug 12 17:18:10 2012 +0800
+# $Date: Sun Aug 12 21:50:20 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 """Server configuration file template. Note that custom configuration should be
@@ -40,6 +40,17 @@ class Config(object):
 
     PRIVATE_NAME = u'private'
     """name of the private directory for each group"""
+
+    FTP_ADMIN_USERNAME = u''
+    """user name for ftp admin"""
+
+    FTP_ADMIN_PASSWD_MD5 = ''
+    """md5 of password for ftp admin"""
+
+    LOG_HANDLERS = [None, None, None]
+    """access, modify and error log handlers, which can be an instance of
+    logging Handler objects in python2 standard library. If set to None, a
+    default StreamHandler will be used."""
 
 config = Config()
 
