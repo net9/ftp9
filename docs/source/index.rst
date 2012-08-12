@@ -1,5 +1,5 @@
 ..  $File: index.rst
-    $Date: Sun Aug 12 11:59:48 2012 +0800
+    $Date: Sun Aug 12 17:16:41 2012 +0800
     $Author: jiakai<jia.kai66@gmail.com>
 
 
@@ -22,7 +22,8 @@ Quickstart:
 
                echo 'export PYTHON=python2' > init.sh
 
-    #. Create ``src/config_overwrite.py`` to set custom configuration.
+    #. Create ``src/ftp9/config_overwrite.py`` to set custom configuration. See
+       ``src/ftp9/config.py`` for available options.
 
        Example:
 
@@ -31,8 +32,11 @@ Quickstart:
                def overwrite_config(conf):
                    conf.FTP_BIND = ('', 21)
                    conf.FTP_ROOT = '/data/ftp'
+                   conf.FTP_DISCARDEDGRP_SAVEDIR = '/data/ftp.old'
+                   conf.CLIENT_ID = '<your clien id here>'
+                   conf.CLIENT_SECRET = '<your client secret here>'
+                   conf.INTERFACE_SECRET = '<the interface secret here>'
 
-    
     #. Execute ``start.sh`` to start the server.
 
 Contents:
@@ -40,6 +44,7 @@ Contents:
 .. toctree::
     :maxdepth: 2
 
+    design
     api
 
 

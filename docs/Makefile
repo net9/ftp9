@@ -155,6 +155,6 @@ doctest:
 	      "results in $(BUILDDIR)/doctest/output.txt."
 
 spelling:
-	SPELLING=1 $(SPHINXBUILD) -b spelling $(ALLSPHINXOPTS) $(BUILDDIR)/spelling
+	. ../init.sh && SPELLING=1 $(SPHINXBUILD) -b spelling $(ALLSPHINXOPTS) $(BUILDDIR)/spelling
 	@echo "Spell check completed; look at the " \
 	      "results in $(BUILDDIR)/spelling/output.txt."

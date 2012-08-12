@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # $File: auth.py
-# $Date: Sun Aug 12 10:20:04 2012 +0800
+# $Date: Sun Aug 12 16:24:08 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 import os
@@ -48,16 +48,19 @@ class Authorizer(ftpserver.DummyAuthorizer):
             'd': 'modify', 'f': 'modify', 'm': 'write', 'w': 'write',
             'M': 'modify'}
     def has_perm(self, username, perm, path = None):
-        path = path.decode(config.FILESYSTEM_ENCODING)
+        if isinstance(path, str):
+            path = path.decode(config.FILESYSTEM_ENCODING)
+        if isinstance(username, str):
+            username = username.decode(config.USERNAME_ENCODING)
         parts = path.split(u'/')
         for i in range(len(parts)):
             base = parts[i]
-            if base == 'public' or base == 'private':
+            if base == config.PUBLIC_NAME or base == config.PRIVATE_NAME:
+                base = 'public' if base == config.PUBLIC_NAME else 'private' 
                 g = self._group_info.get_node_by_path(u'/'.join(parts[:i]))
                 if not g:
                     return False
-                return username.decode(config.USERNAME_ENCODING) in \
-                        getattr(g, base + '_' + self._perm_map[perm])
+                return username in getattr(g, base + '_' + self._perm_map[perm])
 
         return perm in ['e', 'l']
 
