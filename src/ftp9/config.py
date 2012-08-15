@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # $File: config.py
-# $Date: Sun Aug 12 22:24:09 2012 +0800
+# $Date: Wed Aug 15 11:04:24 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 """Server configuration file template. Note that custom configuration should be
@@ -9,9 +9,9 @@ defined in ``src/ftp9/config_overwrite.py``. """
 class Config(object):
     FTP_BIND = ('', 8021)
 
-    FTP_ROOT = '/tmp/ftp9'
+    FTP_ROOT = u'/tmp/ftp9'
 
-    FTP_DISCARDEDGRP_SAVEDIR = '/tmp/ftp9-old'
+    FTP_DISCARDEDGRP_SAVEDIR = u'/tmp/ftp9-old'
     """When group structure gets changed, directories for groups that no longer
     exist will be moved to this directory; set to None to remove those
     directories directly."""
@@ -40,6 +40,9 @@ class Config(object):
 
     PRIVATE_NAME = u'private'
     """name of the private directory for each group"""
+
+    ROOT_PUB_NAME = u'pub'
+    """name of the public directory on root"""
 
     FTP_ADMIN_USERNAME = u''
     """user name for ftp admin"""

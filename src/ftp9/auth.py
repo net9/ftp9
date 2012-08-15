@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # $File: auth.py
-# $Date: Wed Aug 15 09:58:49 2012 +0800
+# $Date: Wed Aug 15 11:05:40 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 import os
@@ -18,12 +18,18 @@ class Authorizer(ftpserver.DummyAuthorizer):
     """authorizer used for pyftpdlib"""
 
     _group_info = None
+    _root_path_len = None
+    _home = None
 
     def __init__(self, grp):
         """:param grp: a :class:`ftp9.group.Group` instance used for manipulating group
         information"""
         super(Authorizer, self).__init__()
         self._group_info = grp
+        self._root_path_len = len(config.FTP_ROOT.split(u'/'))
+        self._home = config.FTP_ROOT
+        if isinstance(self._home, unicode):
+            self._home = self._home.encode(config.FILESYSTEM_ENCODING)
 
     def validate_authentication(self, username, passwd):
         if username == config.FTP_ADMIN_USERNAME:
@@ -37,7 +43,7 @@ class Authorizer(ftpserver.DummyAuthorizer):
         return True
 
     def get_home_dir(self, username):
-        return config.FTP_ROOT
+        return self._home
 
     def get_msg_login(self, username):
         return "welcome, " + username + "!"
@@ -56,7 +62,13 @@ class Authorizer(ftpserver.DummyAuthorizer):
         username = fs_enc(username)
         path = fs_enc(path)
         parts = path.split(u'/')
-        for i in range(len(parts)):
+        if len(parts) > self._root_path_len and \
+                parts[self._root_path_len] == config.ROOT_PUB_NAME:
+            if username == config.FTP_ADMIN_USERNAME:
+                return True
+            return self._perm_map[perm] != 'modify'
+
+        for i in range(self._root_path_len, len(parts)):
             base = parts[i]
             if base == config.PUBLIC_NAME or base == config.PRIVATE_NAME:
                 if username == config.FTP_ADMIN_USERNAME:

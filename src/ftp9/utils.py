@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # $File: utils.py
-# $Date: Wed Aug 15 09:55:49 2012 +0800
+# $Date: Wed Aug 15 10:47:50 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 """miscellaneous helper functions"""
@@ -28,7 +28,7 @@ def human_readable_filesize(size):
 
 def relpath(path):
     """return a relative path to the FTP root"""
-    return os.path.relpath(fs_enc(val), config.FTP_ROOT)
+    return os.path.relpath(fs_enc(path), config.FTP_ROOT)
 
 def fs_enc(val):
     """if val is not Unicode, convert it to Unicode using

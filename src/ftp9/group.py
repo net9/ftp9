@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # $File: group.py
-# $Date: Wed Aug 15 09:59:13 2012 +0800
+# $Date: Wed Aug 15 10:43:54 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 """Implementing :class:`Group<ftp9.group.Group>` class and define authorization strategy."""
@@ -100,9 +100,12 @@ class Group(object):
             self._path2grp[rootdir] = node
 
             create_list = set([i.name for i in node.children])
-            if node is not self._root:
+            if node is self._root:
+                create_list.add(config.ROOT_PUB_NAME)
+            else:
                 create_list.add(config.PUBLIC_NAME)
                 create_list.add(config.PRIVATE_NAME)
+
             remove_list = set()
             if os.path.isdir(rootdir):
                 for i in os.listdir(rootdir):
