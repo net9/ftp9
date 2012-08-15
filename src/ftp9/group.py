@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # $File: group.py
-# $Date: Sun Aug 12 21:26:17 2012 +0800
+# $Date: Wed Aug 15 09:59:13 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 """Implementing :class:`Group<ftp9.group.Group>` class and define authorization strategy."""
@@ -10,7 +10,7 @@ import os.path
 import shutil
 
 from ftp9.config import config
-from ftp9.utils import relpath
+from ftp9.utils import relpath, fs_enc
 
 class Group(object):
     """group information and authorization strategy"""
@@ -107,9 +107,7 @@ class Group(object):
             if os.path.isdir(rootdir):
                 for i in os.listdir(rootdir):
                     if os.path.isdir(pjoin(rootdir, i)):
-                        if isinstance(i, str):
-                            i = i.decode(config.FILESYSTEM_ENCODING)
-                        remove_list.add(i)
+                        remove_list.add(fs_enc(i))
 
             intersect = create_list & remove_list
             create_list -= intersect

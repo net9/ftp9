@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # $File: auth.py
-# $Date: Sun Aug 12 20:13:27 2012 +0800
+# $Date: Wed Aug 15 09:58:49 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 import os
@@ -12,6 +12,7 @@ from pyftpdlib import ftpserver
 from ftp9.api import Acnt9API
 from ftp9.exc import FTP9Error
 from ftp9.config import config
+from ftp9.utils import fs_enc
 
 class Authorizer(ftpserver.DummyAuthorizer):
     """authorizer used for pyftpdlib"""
@@ -52,10 +53,8 @@ class Authorizer(ftpserver.DummyAuthorizer):
             'd': 'modify', 'f': 'modify', 'm': 'write', 'w': 'write',
             'M': 'modify'}
     def has_perm(self, username, perm, path = None):
-        if isinstance(username, str):
-            username = username.decode(config.USERNAME_ENCODING)
-        if isinstance(path, str):
-            path = path.decode(config.FILESYSTEM_ENCODING)
+        username = fs_enc(username)
+        path = fs_enc(path)
         parts = path.split(u'/')
         for i in range(len(parts)):
             base = parts[i]

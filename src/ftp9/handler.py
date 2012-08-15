@@ -1,16 +1,17 @@
 # -*- coding: utf-8 -*-
 # $File: handler.py
-# $Date: Sun Aug 12 21:57:46 2012 +0800
+# $Date: Wed Aug 15 10:35:49 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 import logging
+import os.path
 
 from pyftpdlib import ftpserver
 
 from ftp9.auth import Authorizer
 from ftp9.config import config
 from ftp9.group import Group
-from ftp9.utils import human_readable_filesize, relpath
+from ftp9.utils import human_readable_filesize, relpath, fs_enc
 
 _loggers = [
         logging.getLogger('access'),
@@ -31,10 +32,35 @@ _log_access = _loggers[0].info
 _log_modify = _loggers[1].info
 _log_error = _loggers[2].info
 
+class AbstractedFS(ftpserver.AbstractedFS):
+    def listdir(self, path, handler):
+        return [i for i in super(AbstractedFS, self).listdir(path)
+                if fs_enc(i) not in (config.PUBLIC_NAME, config.PRIVATE_NAME)
+                or handler.authorizer.has_perm(
+                    handler.username, "l", os.path.join(path, i))]
+
+    def get_list_dir(self, path, handle):
+        if self.isdir(path):
+            lst = self.listdir(path, handle)
+            lst.sort()
+            return self.format_list(path, lst)
+        else:
+            basedir, filename = os.path.split(path)
+            self.lstat(path)  # raise exc in case of problems
+            return self.format_list(basedir, [filename])
+
+
 class FTPHandler(ftpserver.FTPHandler):
     """customized FTP handler"""
 
     authorizer = Authorizer(Group())
+    abstracted_fs = AbstractedFS
+
+    def run_as_current_user(self, func, *args, **kargs):
+        if func.func_code is AbstractedFS.listdir.func_code or \
+                func.func_code is AbstractedFS.get_list_dir.func_code:
+            return func(args[0], self)
+        return super(FTPHandler, self).run_as_current_user(func, *args, **kargs)
 
     def log(self, msg, logger = _log_access):
         """derived method"""
