@@ -3678,13 +3678,15 @@ class FTPServer(object, asyncore.dispatcher):
     max_cons = 512
     max_cons_per_ip = 0
 
-    def __init__(self, address, handler):
+    def __init__(self, address, handler, uid = None, gid = None):
         """Initiate the FTP server opening listening on address.
 
          - (tuple) address: the host:port pair on which the command
            channel will listen.
 
          - (classobj) handler: the handler class to use.
+
+         - (int/None) uid, gid: set uid/gid after creating the socket
         """
         asyncore.dispatcher.__init__(self)
         self.handler = handler
@@ -3720,6 +3722,10 @@ class FTPServer(object, asyncore.dispatcher):
                 break
             if not self.socket:
                 raise socket.error(msg)
+        if gid is not None:
+            os.setresgid(gid, gid, gid)
+        if uid is not None:
+            os.setresuid(uid, uid, uid)
         self.listen(5)
 
     @property

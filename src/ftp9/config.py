@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # $File: config.py
-# $Date: Wed Aug 15 11:04:24 2012 +0800
+# $Date: Sat Aug 18 19:18:33 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 """Server configuration file template. Note that custom configuration should be
@@ -54,6 +54,9 @@ class Config(object):
     """access, modify and error log handlers, which can be an instance of
     logging Handler objects in python2 standard library. If set to None, a
     default StreamHandler will be used."""
+
+    DAEMON_USER = 'ftp'
+    """the user to run daemon; set to None to disable setuid/setgid"""
 
 config = Config()
 
