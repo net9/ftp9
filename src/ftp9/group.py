@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # $File: group.py
-# $Date: Wed Aug 15 10:43:54 2012 +0800
+# $Date: Fri Aug 31 21:44:38 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 """Implementing :class:`Group<ftp9.group.Group>` class and define authorization strategy."""
@@ -14,6 +14,9 @@ from ftp9.utils import relpath, fs_enc
 
 class Group(object):
     """group information and authorization strategy"""
+    authed_users = None
+    """set(<str>), authorized users"""
+
     class Node(object):
         name = None
 
@@ -155,6 +158,7 @@ class Group(object):
         alluser = set()
         for g in self._path2grp.itervalues():
             alluser.update(g.users, g.admins)
+        self.authed_users = alluser
         add_to_subtree(self._root, ['public_read'], alluser)
 
         for g in self._path2grp.itervalues():

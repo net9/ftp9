@@ -1,1 +1,2 @@
-test helloworld
+test:helloworld
+test_noauth:helloworld

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # $File: auth.py
-# $Date: Wed Aug 15 11:05:40 2012 +0800
+# $Date: Fri Aug 31 21:43:45 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 import os
@@ -40,7 +40,7 @@ class Authorizer(ftpserver.DummyAuthorizer):
         except Exception as e:
             return 'failed to login: {0}'.format(e)
         self._group_info.update(api)
-        return True
+        return username in self._group_info.authed_users
 
     def get_home_dir(self, username):
         return self._home
