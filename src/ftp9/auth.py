@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # $File: auth.py
-# $Date: Fri Aug 31 22:29:18 2012 +0800
+# $Date: Sun Sep 02 23:11:58 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 import os
@@ -42,6 +42,7 @@ class Authorizer(ftpserver.DummyAuthorizer):
         self._group_info.update(api)
         if username not in self._group_info.authed_users:
             return 'failed to login: unauthorized user'
+        return True
 
     def get_home_dir(self, username):
         return self._home
