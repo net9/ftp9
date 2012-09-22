@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 # $File: utils.py
-# $Date: Wed Aug 15 10:47:50 2012 +0800
+# $Date: Sat Sep 22 09:20:01 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 """miscellaneous helper functions"""
 
+import os
 import os.path
 
 from ftp9.config import config
@@ -30,10 +31,15 @@ def relpath(path):
     """return a relative path to the FTP root"""
     return os.path.relpath(fs_enc(path), config.FTP_ROOT)
 
-def fs_enc(val):
+def fs_enc(val, path = None):
     """if val is not Unicode, convert it to Unicode using
-    config.FILESYSTEM_ENCODING"""
+    config.FILESYSTEM_ENCODING
+    if failed to decode and `path` is not None, then try other encodings and
+    rename the file if successful (`path` should be the base directory)"""
     if isinstance(val, str):
-        val = val.decode(config.FILESYSTEM_ENCODING)
+        try:
+            val = val.decode(config.FILESYSTEM_ENCODING)
+        except UnicodeDecodeError:
+            pass
     return val
 

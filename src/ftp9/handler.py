@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # $File: handler.py
-# $Date: Wed Aug 15 10:35:49 2012 +0800
+# $Date: Sat Sep 22 09:25:25 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 import logging
@@ -34,10 +34,27 @@ _log_error = _loggers[2].info
 
 class AbstractedFS(ftpserver.AbstractedFS):
     def listdir(self, path, handler):
-        return [i for i in super(AbstractedFS, self).listdir(path)
-                if fs_enc(i) not in (config.PUBLIC_NAME, config.PRIVATE_NAME)
-                or handler.authorizer.has_perm(
-                    handler.username, "l", os.path.join(path, i))]
+        ret = list()
+        for i in super(AbstractedFS, self).listdir(path):
+            try:
+                idec = i.decode(config.FILESYSTEM_ENCODING)
+            except UnicodeDecodeError:
+                idec = ''
+                for enc in config.FILESYSTEM_POSSIBLE_ENCODINGS:
+                    try:
+                        new = i.decode(enc)
+                    except UnicodeDecodeError:
+                        continue
+                    new_enc = new.encode(config.FILESYSTEM_ENCODING)
+                    os.rename(os.path.join(path, i),
+                            os.path.join(path, new_enc))
+                    i = new_enc
+                    idec = new
+            if idec not in (config.PUBLIC_NAME, config.PRIVATE_NAME) \
+                    or handler.authorizer.has_perm(
+                            handler.username, "l", os.path.join(path, i)):
+                ret.append(i)
+        return ret
 
     def get_list_dir(self, path, handle):
         if self.isdir(path):

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # $File: config.py
-# $Date: Sat Aug 18 19:18:33 2012 +0800
+# $Date: Sat Sep 22 08:40:53 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 """Server configuration file template. Note that custom configuration should be
@@ -27,6 +27,8 @@ class Config(object):
 
     FILESYSTEM_ENCODING = 'utf-8'
     USERNAME_ENCODING = 'utf-8'
+
+    FILESYSTEM_POSSIBLE_ENCODINGS = ['gb18030']
 
     CLIENT_ID = ''
     CLIENT_SECRET = ''
