@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # $File: __init__.py
-# $Date: Sat Aug 18 19:24:39 2012 +0800
+# $Date: Sat Oct 06 22:58:42 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 def _force_ipv4():
@@ -13,11 +13,25 @@ def _force_ipv4():
         return orig(host, port, family, socktype, proto, flags)
     socket.getaddrinfo = getaddrinfo
 
+from ftp9.config import config
+
+def _patch_path_join():
+    import os.path
+    orig = os.path.join
+    def join(*args):
+        args = list(args)
+        for i in range(len(args)):
+            if type(args[i]) is unicode:
+                args[i] = args[i].encode(config.FILESYSTEM_ENCODING)
+        return orig(*args)
+    os.path.join = join
+
+
 _force_ipv4()
+_patch_path_join()
 
 from pyftpdlib import ftpserver
 
-from ftp9.config import config
 from ftp9.handler import FTPHandler
 
 import pwd
