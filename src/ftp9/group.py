@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # $File: group.py
-# $Date: Fri Aug 31 21:44:38 2012 +0800
+# $Date: Mon Oct 08 14:05:39 2012 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 """Implementing :class:`Group<ftp9.group.Group>` class and define authorization strategy."""
@@ -67,7 +67,8 @@ class Group(object):
     def get_node_by_path(self, path):
         """return the corresponding Node for filesystem path ``path``, or None
         on error"""
-        while path[-1] == '/':
+        path = fs_enc(path)
+        while path[-1] == u'/':
             path = path[:-1]
         return self._path2grp.get(path)
 
@@ -91,7 +92,7 @@ class Group(object):
 
     def _update_fs(self):
         pjoin = os.path.join
-        self._path2grp = dict()
+        path2grp = dict()
 
         def get_grpname(fname):
             t = fname.split('-', 1)
@@ -100,7 +101,7 @@ class Group(object):
             return t[1]
 
         def walk(node, rootdir):
-            self._path2grp[rootdir] = node
+            path2grp[rootdir] = node
 
             create_list = set([i.name for i in node.children])
             if node is self._root:
@@ -139,6 +140,8 @@ class Group(object):
                 walk(i, pjoin(rootdir, i.name))
         
         walk(self._root, config.FTP_ROOT)
+
+        self._path2grp = {fs_enc(k): v for k, v in path2grp.iteritems()}
 
 
     def _update_perm(self):
